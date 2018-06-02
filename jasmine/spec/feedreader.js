@@ -10,18 +10,19 @@
  */
 $(function() {
 
-    /* This is our first test suite - a test suite just contains
-    * a related set of tests. This suite is all about the RSS
+    /* This suite is all about the RSS
     * feeds definitions, the allFeeds variable in our application.
     */
     describe('RSS Feeds', function() {
-        /* This is our first test - it tests to make sure that the
+
+        /* it tests to make sure that the
          * allFeeds variable has been defined and that it is not
          * empty. 
          */
         it('- are defined', function() {
             expect(allFeeds).toBeDefined();
             expect(allFeeds.length).not.toBe(0);
+
         });
 
         /* test loops through each feed
@@ -32,6 +33,7 @@ $(function() {
             allFeeds.forEach(feed => {
                 expect(feed.url).toBeDefined();
                 expect(feed.url.length).not.toBe(0);
+
             });
 
         });
@@ -44,9 +46,11 @@ $(function() {
             allFeeds.forEach(feed => {
                 expect(feed.name).toBeDefined();
                 expect(feed.name.length).not.toBe(0);
+
             });
 
         });
+
     });
 
 
@@ -58,42 +62,65 @@ $(function() {
         it('- hidden by default', function() {
             let hiddy = $('body').hasClass('menu-hidden');
             expect(hiddy).toBe(true);
+
         });
 
-         /* TODO: Write a test that ensures the menu changes
-          * visibility when the menu icon is clicked. This test
-          * should have two expectations: does the menu display when
-          * clicked and does it hide when clicked again.
-          */
+        /* test that ensures the menu changes
+         * visibility when the menu icon is clicked.
+         */
         it('- unhide by click', function() {
+
+            $('.menu-icon-link').click() ;
             let beforeClick = $('body').hasClass('menu-hidden');
-            let boba;
-            $('.menu-icon-link').on('click', function () {
-                boba = $('body').hasClass('menu-hidden');
-            });
-            expect(boba && beforeClick).toBe(false);
+            expect(beforeClick).not.toBe(true);
+
+            $('.menu-icon-link').click() ;
+            beforeClick = $('body').hasClass('menu-hidden');
+            expect(beforeClick).toBe(true);
+
         });
-    });        
 
-    
-
+    });
 
 
+    describe('Initial Entries', function() {
 
-
-    /* TODO: Write a new test suite named "Initial Entries" */
-
-        /* TODO: Write a test that ensures when the loadFeed
+        /* test ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
          */
+        beforeEach(function(done) {
+            loadFeed(0, done) 
 
-    /* TODO: Write a new test suite named "New Feed Selection" */
+        });
 
-        /* TODO: Write a test that ensures when a new feed is loaded
+        it('- loadFeed n feed container test', function() {
+            let containers = $('.feed .entry');
+            expect(containers.length).not.toBe(0);
+
+        });
+
+    });
+
+
+    describe('New Feed Selection', function() {
+
+        /* test ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
          */
+        beforeEach(function(done) {
+            loadFeed(0, done);
+            this.Fhtml = $('.feed .entry h2').html();
+            loadFeed(2, done);
+
+        });
+
+        it('- feed changes test', function() {
+            let feedCont = $('.feed .entry h2').html();
+            expect(feedCont).not.toBe(this.Fhtml);
+
+        });
+
+    });
+
 }());
