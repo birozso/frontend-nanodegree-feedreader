@@ -108,16 +108,20 @@ $(function() {
         /* test ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-        beforeEach(function(done) {
-            loadFeed(0, done);
-            this.Fhtml = $('.feed .entry h2').html();
-            loadFeed(2, done);
+        beforeEach((done)=>{
+            loadFeed(0, ()=> {
+                fHtml = $('.feed .entry h2').html();
 
+                loadFeed(1, ()=> {
+                    fHtmlCont = $('.feed .entry h2').html();
+                    done();
+                });
+
+            });
         });
 
         it('- feed changes test', function() {
-            let feedCont = $('.feed .entry h2').html();
-            expect(feedCont).not.toBe(this.Fhtml);
+            expect(fHtmlCont).not.toBe(fHtml);
 
         });
 
